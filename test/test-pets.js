@@ -18,11 +18,11 @@ chai.use(chaiHttp);
 
 describe('Pets', ()  => {
 
-  after(() => { 
+  after(() => {
     Pet.deleteMany({$or: [{name: 'Norman'}, {name: 'Spider'}] }).exec((err, pets) => {
       console.log(pets)
       pets.remove();
-    }) 
+    })
   });
 
   // TEST INDEX
@@ -46,8 +46,8 @@ describe('Pets', ()  => {
           done();
         });
   });
-  
-  // TEST CREATE 
+
+  // TEST CREATE
   it('should create a SINGLE pet on /pets POST', (done) => {
     chai.request(server)
         .post('/pets')
