@@ -13,13 +13,18 @@ const methodOverride = require('method-override')
 
 const app = express();
 
+// MongoDB Mongoose setup
 const mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/petes-pets');
+mongoose.connect('mongodb://localhost/petes-pets', {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+});
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
+// static folder setup
 app.use(express.static(path.join(__dirname, 'public')));
 
 // override with POST having ?_method=DELETE or ?_method=PUT
