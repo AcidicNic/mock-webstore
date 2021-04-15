@@ -21,7 +21,7 @@ describe('Pets', ()  => {
   after(() => {
     Pet.deleteMany({$or: [{name: 'Norman'}, {name: 'Spider'}] }).exec((err, pets) => {
       console.log(pets)
-      pets.remove();
+      // pets.remove();
     })
   });
 
@@ -109,7 +109,7 @@ describe('Pets', ()  => {
     var pet = new Pet(fido);
     pet.save((err, data)  => {
      chai.request(server)
-      .delete(`/pets/${data._id}?_method=DELETE`)
+      .delete(`/pets/${data._id}?method=DELETE`)
       .end((err, res) => {
         res.should.have.status(200);
         res.should.be.html
@@ -117,4 +117,19 @@ describe('Pets', ()  => {
       });
     });
   });
+
+  // TEST SEARCH
+  it('should index ALL pets on / GET', (done) => {
+    var pet = new Pet(fido);
+    pet.save((err, data)  => {
+      chai.request(server)
+      .get('/search?q=greyhound')
+      .end((err, res) => {
+        res.should.have.status(200);
+        res.should.be.html;
+        done();
+      });
+    });
+  });
+
 });
