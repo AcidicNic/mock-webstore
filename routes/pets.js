@@ -58,11 +58,19 @@ module.exports = (app) => {
 
   // SEARCH PETS
   app.get('/search', (req, res) => {
+    let page = req.query.page || 1;
     const query = new RegExp(req.query.q, 'i');
-    Pet.find({$or:[
+
+    Pet.paginate({$or:[
       {'name': query}, {'species': query}
-    ]}).exec((err, pets) => {
-      res.render('pets-index', { pets: pets });
+    ]}).then((pets) => {
+      if (page < 1) {
+        page = 1
+      } else if (page > pets.pages) {
+        page = pets.pages
+      }
+      res.render('pets-index', { pets: pets.docs, pageCount: pets.pages, thisPage: page });
     });
   });
+
 }

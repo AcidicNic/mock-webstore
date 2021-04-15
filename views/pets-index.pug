@@ -12,4 +12,30 @@ block content
             p.card-text= pet.description
             .text-right
                 a.card-link(href=`/pets/${pet._id}`) View #{pet.name}
-
+  
+  nav(aria-label='Page Navigation').d-flex.justify-content-center
+    ul.pagination
+      //- Previous page btn
+      if thisPage > 1
+        li.page-item
+          if query
+            a.page-link(href=`?q=${query}&page=${parseInt(thisPage) - 1}`) Previous
+          else
+            a.page-link(href=`?page=${parseInt(thisPage) - 1}`) Previous
+      
+      //- List all pages
+      - var i = 1;
+      while i <= pageCount
+        li.page-iten
+          if query
+            a.page-link(href=`?q=${query}&page=${i}`)= i++
+          else
+            a.page-link(href=`?page=${i}`)= i++
+            
+      //- Next page btn
+      if thisPage < pageCount
+        li.page-item
+          if query
+            a.page-link(href=`?q=${query}&page=${parseInt(thisPage) + 1}`) Next
+          else
+            a.page-link(href=`?page=${parseInt(thisPage) + 1}`) Next

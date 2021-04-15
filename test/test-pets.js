@@ -19,7 +19,8 @@ chai.use(chaiHttp);
 describe('Pets', ()  => {
 
   after(() => {
-    Pet.deleteMany({$or: [{name: 'Norman'}, {name: 'Spider'}] }).exec((err, pets) => {
+    Pet.deleteMany({$or: [{name: 'Norman'}, {name: 'Spider'}] })
+    .exec((err, pets) => {
       console.log(pets)
       // pets.remove();
     })
