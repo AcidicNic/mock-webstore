@@ -104,19 +104,34 @@ module.exports = (app) => {
 
   // SEARCH PETS
   app.get('/search', (req, res) => {
-    let page = req.query.page || 1;
-    const query = new RegExp(req.query.q, 'i');
+    Pet.find(
+      { $text : { $search : req.query.term } },
+      { score : { $meta: "textScore" } }
+    )
+    .sort({ score : { $meta : 'textScore' } })
+    .limit(20)
+    .exec(function(err, pets) {
+      if (err) { return res.status(400).send(err) }
 
-    Pet.paginate({$or:[
-      {'name': query}, {'species': query}
-    ]}).then((pets) => {
-      if (page < 1) {
-        page = 1
-      } else if (page > pets.pages) {
-        page = pets.pages
+      if (req.header('Content-Type') == 'application/json') {
+        return res.json({ pets: pets });
+      } else {
+        return res.render('pets-index', { pets: pets, term: req.query.term });
       }
-      res.render('pets-index', { pets: pets.docs, pageCount: pets.pages, thisPage: page });
     });
+    // let page = req.query.page || 1;
+    // const query = new RegExp(req.query.q, 'i');
+    //
+    // Pet.paginate({$or:[
+    //   {'name': query}, {'species': query}
+    // ]}).then((pets) => {
+    //   if (page < 1) {
+    //     page = 1
+    //   } else if (page > pets.pages) {
+    //     page = pets.pages
+    //   }
+    //   res.render('pets-index', { pets: pets.docs, pageCount: pets.pages, thisPage: page });
+    // });
   });
 
   // PURCHASE PETS
