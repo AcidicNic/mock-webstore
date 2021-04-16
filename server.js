@@ -40,7 +40,6 @@ app.use(cookieParser());
 // Stripe public key -> local var for the templates
 app.locals.PUBLIC_STRIPE_API_KEY = process.env.PUBLIC_STRIPE_API_KEY;
 
-
 require('./routes/index.js')(app);
 require('./routes/pets.js')(app);
 
