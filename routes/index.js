@@ -12,6 +12,15 @@ module.exports = (app) => {
       } else if (page > pets.pages) {
         page = pets.pages
       }
+      if (req.header('Content-Type') == 'application/json') {
+        return res.json({
+          pets: results.docs, pagesCount: results.pages, currentPage: page
+        });
+      } else {
+        res.render('pets-index', {
+          pets: results.docs, pagesCount: results.pages, currentPage: page
+        });
+      }
       res.render('pets-index', { pets: pets.docs, pageCount: pets.pages, thisPage: page });
     });
   });
