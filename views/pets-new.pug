@@ -7,31 +7,27 @@ block content
       legend New Pet
       form(action='/pets', method='post', id='new-pet')
         .form-group
-            label Name
-              span.text-danger *
-            input.form-control(name='name' required)
+          label Name
+            span.text-danger *
+          input.form-control(name='name' required)
         .form-group
-            label Birthday
-              span.text-danger *
-            input.form-control(name='birthday' required)
+          label Birthday
+            span.text-danger *
+          input.form-control(name='birthday' required)
         .form-group
-            label Species
-              span.text-danger *
-            input.form-control(name='species' required)
+          label Species
+            span.text-danger *
+          input.form-control(name='species' required)
         .form-group
-            label Rectangular Image URL
-              span.text-danger *
-            input.form-control(name='picUrl' required type='url')
+          label Avatar
+            span.text-danger *
+          input.form-control(name="avatar" type="file" required)
         .form-group
-            label Square Image URL
-              span.text-danger *
-            input.form-control(name='picUrlSq' required type='url')
+          label Favorite Food
+            span.text-danger *
+          input.form-control(name='favoriteFood' required)
         .form-group
-            label Favorite Food
-              span.text-danger *
-            input.form-control(name='favoriteFood' required)
-        .form-group
-            label Description
-              span.text-danger *
-            textarea.form-control(name='description' required minlength='140')
+          label Description
+            span.text-danger *
+          textarea.form-control(name='description' required minlength='140')
         button.btn.btn-primary(type='submit') Save
