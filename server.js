@@ -17,7 +17,9 @@ const app = express();
 const mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/petes-pets', {
   useNewUrlParser: true,
-  useUnifiedTopology: true
+  useUnifiedTopology: true,
+  useCreateIndex: true,
+  useFindAndModify: true
 });
 
 // view engine setup
