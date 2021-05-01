@@ -44,14 +44,17 @@ module.exports = (app) => {
 
   // CREATE PET
   app.post('/pets', upload.single('avatar'), (req, res, next) => {
-    console.log(req.file)
+    console.log(req.file);
     var pet = new Pet(req.body);
-
     pet.save(function (err) {
       if (req.file) {
+        console.log("if");
         // Upload the images
         client.upload(req.file.path, {}, function (err, versions, meta) {
-          if (err) { return res.status(400).send({ err: err }) };
+          if (err) {
+            console.log(err);
+            return res.status(400).send({ err: err })
+          };
 
           // Pop off the -square and -standard and just use the one URL to grab the image
           versions.forEach(function (image) {
@@ -65,10 +68,11 @@ module.exports = (app) => {
           res.send({ pet: pet });
         });
       } else {
+        console.log("else");
         res.send({ pet: pet });
       }
     })
-  });
+  })
 
   // SHOW PET
   app.get('/pets/:id', (req, res) => {
@@ -103,35 +107,22 @@ module.exports = (app) => {
   });
 
   // SEARCH PETS
-  app.get('/search', (req, res) => {
-    Pet.find(
-      { $text : { $search : req.query.term } },
-      { score : { $meta: "textScore" } }
-    )
-    .sort({ score : { $meta : 'textScore' } })
-    .limit(20)
-    .exec(function(err, pets) {
-      if (err) { return res.status(400).send(err) }
-
-      if (req.header('Content-Type') == 'application/json') {
-        return res.json({ pets: pets });
-      } else {
-        return res.render('pets-index', { pets: pets, term: req.query.term });
-      }
-    });
-    // let page = req.query.page || 1;
-    // const query = new RegExp(req.query.q, 'i');
-    //
-    // Pet.paginate({$or:[
-    //   {'name': query}, {'species': query}
-    // ]}).then((pets) => {
-    //   if (page < 1) {
-    //     page = 1
-    //   } else if (page > pets.pages) {
-    //     page = pets.pages
-    //   }
-    //   res.render('pets-index', { pets: pets.docs, pageCount: pets.pages, thisPage: page });
-    // });
+  app.get('/search', function (req, res) {
+    Pet
+      .find(
+        { $text : { $search : req.query.term } },
+        { score : { $meta: "textScore" } }
+      )
+      .sort({ score : { $meta : 'textScore' } })
+      .limit(20)
+      .exec(function(err, pets) {
+        if (err) { return res.status(400).send(err) }
+        if (req.header('Content-Type') == 'application/json') {
+          return res.json({ pets: pets });
+        } else {
+          return res.render('pets-index', { pets: pets, term: req.query.term });
+        }
+      });
   });
 
   // PURCHASE PETS

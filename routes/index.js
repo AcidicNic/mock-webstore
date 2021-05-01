@@ -1,27 +1,21 @@
 const Pet = require('../models/pet');
 
 module.exports = (app) => {
-
   /* GET home page. */
   app.get('/', (req, res) => {
-    let page = req.query.page || 1;
+    const page = req.query.page || 1
 
-    Pet.paginate().then((pets) => {
-      if (page < 1) {
-        page = 1
-      } else if (page > pets.pages) {
-        page = pets.pages
-      }
+    Pet.paginate({}, { page: page }).then((results) => {
+
       if (req.header('Content-Type') == 'application/json') {
         return res.json({
-          pets: pets.docs, pagesCount: pets.pages, currentPage: page
+          pets: results.docs, pagesCount: results.pages, currentPage: page
         });
       } else {
         res.render('pets-index', {
-          pets: pets.docs, pagesCount: pets.pages, currentPage: page
+          pets: results.docs, pagesCount: results.pages, currentPage: page
         });
       }
-      res.render('pets-index', { pets: pets.docs, pageCount: pets.pages, thisPage: page });
     });
   });
 }

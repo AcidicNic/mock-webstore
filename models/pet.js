@@ -23,8 +23,9 @@ const PetSchema = new Schema({
   timestamps: true
 });
 
-PetSchema.index({
-    name: 'text', species: 'text', favoriteFood: 'text', description: 'text'
+PetSchema.index(
+  {
+  name: 'text', species: 'text', favoriteFood: 'text', description: 'text'
   },
   {
     name: 'My text index', weights: {
@@ -32,6 +33,7 @@ PetSchema.index({
     }
   }
 );
+
 
 PetSchema.plugin(mongoosePaginate);
 
